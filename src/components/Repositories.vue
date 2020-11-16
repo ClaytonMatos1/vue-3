@@ -1,7 +1,7 @@
 <template>
   <div class="repos">
     <div class="search">
-      <input type="text" ref="inputName" id="userName" placeholder="Digite o nome do Github">
+      <input type="text" ref="inputName" id="userName" placeholder="Digite o nome do Github" @keyup.enter="validInput">
       <button @click="validInput">Search</button>
     </div>
     <Techs :techs="techs" />
@@ -53,6 +53,7 @@ export default {
     }
   },
   methods: {
+    // TableRepos component
     validInput() {
       this.repositories = [];
       const name = this.$refs.inputName.value;
@@ -61,29 +62,23 @@ export default {
         this.resetTechs();
         return;
       }
-
       this.getRepositories(name);
     },
+    // callService
     async getRepositories (name) {
       this.repositories = await RepositoryService.getRepositories(name);
     },
+    // trigger components
     checkEmptyRepository () {
       if (this.repositories.length == 0) {
         this.resetUser();
         this.resetTechs();
         return;
       }
-      this.fillTechs();
       this.fillUser();
+      this.fillTechs();
     },
-    fillTechs () {
-      this.languages = this.repositories.map(repos => repos.language);
-      this.techs = this.languages.filter((language, index) =>
-        language && this.languages.indexOf(language) === index);
-    },
-    resetTechs () {
-      this.techs = [];
-    },
+    // User component
     fillUser () {
       const { owner } = this.repositories[0];
       this.user.name = owner.login;
@@ -94,6 +89,15 @@ export default {
       this.user.name = '';
       this.user.img = '';
       this.user.url = '';
+    },
+    // InfoReposUser component
+    fillTechs () {
+      this.languages = this.repositories.map(repos => repos.language);
+      this.techs = this.languages.filter((language, index) =>
+        language && this.languages.indexOf(language) === index);
+    },
+    resetTechs () {
+      this.techs = [];
     }
   },
   watch: {
