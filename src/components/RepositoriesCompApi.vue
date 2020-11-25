@@ -1,5 +1,4 @@
 <template>
-    <div class="repos">
     <div class="search">
       <input type="text" ref="inputName" id="userName" placeholder="Digite o nome do Github" @keyup.enter="validInput">
       <button @click="validInput">Search</button>
@@ -20,7 +19,6 @@
       </div>
       <TableRepos :repositories="repositories" />
     </div>
-  </div>
 </template>
 
 <script>
